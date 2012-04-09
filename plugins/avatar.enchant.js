@@ -65,13 +65,8 @@ enchant.AvatarCharacter = enchant.Class.create(enchant.Sprite, {
          */
 		this.animPattern = { "stop": [ 0]};
 
-        /**
-         * Frame number of animation
-         * @type {Object}
-         */
-		this.animFrame=0;
 		this.addEventListener('enterframe',function(){
-			if((~~(this.age) & 0x03)!=0)return;
+			if((this._animAge++ & 0x03)!=0)return;
 			if(this.action){
 				var animPattern = this.animPattern[this.action];
 				this.frame = animPattern[this.animFrame];
@@ -100,6 +95,26 @@ enchant.AvatarCharacter = enchant.Class.create(enchant.Sprite, {
 	 */
 	right:function(){
 		this.scaleX=-1;
+	},
+	/**
+	 * Name of animation pattern
+	 * @type {String}
+	 */
+	action:{
+		get:function(){
+			return this._action;
+		},
+		set:function(val){
+			if(this._action != val){
+				this._action = val;
+				this._animAge = 0;
+				/**
+				 * Frame number of animation
+				 * @type {Number}
+				 */
+				this.animFrame = 0;
+			}
+		}
 	}
 });
 
