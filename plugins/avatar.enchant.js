@@ -69,17 +69,19 @@ enchant.AvatarCharacter = enchant.Class.create(enchant.Sprite, {
 			if((this._animAge++ & 0x03)!=0)return;
 			if(this.action){
 				var animPattern = this.animPattern[this.action];
-				this.frame = animPattern[this.animFrame];
-				this.animFrame++;
-				if(animPattern[this.animFrame]==-1){
-					this.animFrame=0;
-					this.action="stop";
-				}
-				if(animPattern[this.animFrame]==-2){
+				if (animPattern[this.animFrame] == -2) {
 					this.parentNode.removeChild(this);
+				} else {
+					if (animPattern[this.animFrame] == -1) {
+						this.action = "stop";
+						this._animAge++;
+						animPattern = this.animPattern[this.action];
+					}
+					this.frame = animPattern[this.animFrame];
+					if (++this.animFrame >= animPattern.length) {
+						this.animFrame = 0;
+					}
 				}
-				if(this.animFrame>=animPattern.length)
-					this.animFrame=0;
 			}
 		});
 	},
